@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union, Annotated
+from typing import Any, Dict, List, Optional, TypeAlias, Union, Annotated
 
 from pydantic import BaseModel, Field, StringConstraints
 
@@ -45,7 +45,7 @@ class Input(BaseModel):
     type: Optional[Union[List[str], Type]] = None
 
 
-class Classes(BaseModel):
+class Class(BaseModel):
     class Config:
         extra = "forbid"
 
@@ -64,21 +64,27 @@ class Lookup(BaseModel):
     datapacks: Optional[List[str]] = None
 
 
+Classes: TypeAlias = Dict[Annotated[str, StringConstraints(pattern=r'^[A-Z,a-z]*')], Class]
+Context: TypeAlias = Optional[Union[List, str, Dict[str, Any]]]
+InputGroups: TypeAlias = Optional[List[Dict[str, Any]]]
+Resolve: TypeAlias = Optional[List[ResolveItem]]
+Lookups: TypeAlias = Optional[Dict[Annotated[str, StringConstraints(pattern=r'^[A-Z,a-z]*')], Lookup]]
+
 class ModeFile(BaseModel):
     class Config:
         extra = "allow"
 
     metadata: Metadata = Field(..., description='Profile Metadata')
-    context: Optional[Union[List, str, Dict[str, Any]]] = None
-    inputGroups: Optional[List[Dict[str, Any]]] = Field(
+    context: Context = None
+    inputGroups: InputGroups = Field(
         None, description='Definitons for the top-level groups of inputs (properties)'
     )
-    resolve: Optional[List[ResolveItem]] = Field(
+    resolve: Resolve = Field(
         None, description='Configuration to resolve property associations'
     )
-    classes: Dict[Annotated[str, StringConstraints(pattern=r'^[A-Z,a-z]*')], Classes] = Field(
+    classes:  Classes= Field(
         ..., description='Class definitions'
     )
-    lookup: Optional[Dict[Annotated[str, StringConstraints(pattern=r'^[A-Z,a-z]*')], Lookup]] = Field(
+    lookup: Lookup= Field(
         None, description='Lookup definitions'
     )

@@ -24,7 +24,7 @@ from linkml._version import __version__
 from linkml.generators.jsonldcontextgen import ContextGenerator
 from linkml.utils.generator import Generator, shared_arguments
 
-from proclaim.mode.schema import ModeFile, Metadata
+import proclaim.mode.schema as mode
 
 @dataclass
 class RoCrateModeGenerator(Generator):
@@ -33,11 +33,11 @@ class RoCrateModeGenerator(Generator):
     name: str | None = None
     description: str | None = None
     version: float | None = None
-    classes={}
-    lookup={}
-    context=[]
-    input_groups=[]
-    resolve=[]
+    classes: mode.Classes = {}
+    lookup: mode.Lookups = {}
+    context: mode.Context=[]
+    input_groups: mode.InputGroups=[]
+    resolve: mode.Resolve = []
 
     def visit_schema(self, **kwargs) -> Optional[str]:
         """Visited once at the beginning of generation
@@ -58,7 +58,7 @@ class RoCrateModeGenerator(Generator):
         if self.description is None:
             raise Exception()
 
-        mode_file: ModeFile = ModeFile(metadata=Metadata(name=self.name, description=self.description, version=self.version), classes=self.classes, lookup=self.lookup, context=self.context, inputGroups=self.input_groups, resolve=self.resolve)
+        mode_file: mode.ModeFile = mode.ModeFile(metadata=mode.Metadata(name=self.name, description=self.description, version=self.version), classes=self.classes, lookup=self.lookup, context=self.context, inputGroups=self.input_groups, resolve=self.resolve)
 
     def visit_class(self, cls: ClassDefinition) -> Optional[Union[str, bool]]:
         """Visited once per schema class
@@ -66,6 +66,20 @@ class RoCrateModeGenerator(Generator):
         @param cls: class being visited
         @return: Visit slots and end class.  False means skip and go on
         """
+        parents: list[str] = []
+        if isinstance(cls.subclass_of, str):
+            parents.append(cls.subclass_of)
+        elif isinstance(cls.subclass_of, list):
+            parents += cls.subclass_of
+
+        
+
+        self.classes[cls.name] = mode.Class(
+            id=cls.class_uri,
+            subClassOf=parents,
+            hasSubclass=None,
+            inputs = []
+        )
         return True
 
     def end_class(self, cls: ClassDefinition) -> Optional[str]:
