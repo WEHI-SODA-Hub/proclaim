@@ -63,6 +63,15 @@ class Lookup(BaseModel):
     module: Optional[str] = None
     datapacks: Optional[List[str]] = None
 
+class Group(BaseModel, extra="forbid"):
+    """
+    A logical grouping of inputs
+    """
+    name: str
+    help: str
+    #: URIs for inputs to include in this group
+    inputs: list[str]
+
 
 Classes: TypeAlias = Dict[Annotated[str, StringConstraints(pattern=r'^[A-Z,a-z]*')], Class]
 Context: TypeAlias = Optional[Union[List, str, Dict[str, Any]]]
@@ -76,6 +85,8 @@ class ModeFile(BaseModel):
 
     metadata: Metadata = Field(..., description='Profile Metadata')
     context: Context = None
+    #: Groups inputs together into logical categories
+    #: A list of dicts where each dict is a group that has a name 
     inputGroups: InputGroups = Field(
         None, description='Definitons for the top-level groups of inputs (properties)'
     )
@@ -85,6 +96,6 @@ class ModeFile(BaseModel):
     classes:  Classes= Field(
         ..., description='Class definitions'
     )
-    lookup: Lookup= Field(
+    lookup: Lookups = Field(
         None, description='Lookup definitions'
     )
