@@ -83,19 +83,19 @@ class ModeFile(BaseModel):
     class Config:
         extra = "allow"
 
-    metadata: Metadata = Field(..., description='Profile Metadata')
+    metadata: Annotated[Metadata, Field(description='Profile Metadata')]
+    classes: Annotated[Classes, Field(
+        description='Class definitions'
+    )]
     context: Context = None
     #: Groups inputs together into logical categories
     #: A list of dicts where each dict is a group that has a name 
-    inputGroups: InputGroups = Field(
-        None, description='Definitons for the top-level groups of inputs (properties)'
-    )
-    resolve: Resolve = Field(
+    inputGroups: Annotated[InputGroups,Field(
+        description='Definitions for the top-level groups of inputs (properties)'
+    )] = None
+    resolve: Annotated[Resolve, Field(
         None, description='Configuration to resolve property associations'
-    )
-    classes:  Classes= Field(
-        ..., description='Class definitions'
-    )
-    lookup: Lookups = Field(
-        None, description='Lookup definitions'
-    )
+    )] = None
+    lookup: Annotated[Lookups, Field(
+        description='Lookup definitions'
+    )] = None
