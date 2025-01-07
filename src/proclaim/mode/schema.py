@@ -34,7 +34,7 @@ class Input(BaseModel):
     class Config:
         extra = "allow"
 
-    id: Annotated[str, StringConstraints(pattern=r'^(https?|http?)://')]
+    id: str
     name: str
     label: Optional[str] = None
     multiple: Optional[bool] = None
@@ -49,7 +49,7 @@ class Class(BaseModel):
     class Config:
         extra = "forbid"
 
-    id: Optional[Annotated[str, StringConstraints(pattern=r'^(https?|http?)://')]] = None
+    id: Optional[str] = None
     hasSubclass: Optional[List[str]] = None
     subClassOf: Optional[List[str]] = None
     inputs: List[Input]

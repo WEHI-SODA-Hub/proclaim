@@ -1,5 +1,7 @@
 id: https://github.com/crs4/rocrate-validator/profiles/workflow-ro-crate/linkml
 name: workflow_ro_crate_linkml
+description: LinkML Schema defining the Workflow Run RO-Crate profile
+version: '0.1'
 prefixes:
   linkml: https://w3id.org/linkml/
   schema: http://schema.org/
@@ -12,6 +14,7 @@ prefixes:
   workflow-ro-crate: https://github.com/crs4/rocrate-validator/profiles/workflow-ro-crate/
 imports:
   - linkml:types
+  - ./schemaorg
 default_range: string
 
 classes:

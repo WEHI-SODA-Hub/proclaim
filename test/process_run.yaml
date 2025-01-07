@@ -1,11 +1,10 @@
-name: Process Run
+name: ProcessRun
 id: https://w3id.org/ro/wfrun/process/0.5
+version: 0.0.1
 description: |
   This profile is used to describe the execution of an implicit workflow, indicating that one or more computational tools have been executed, typically generating some result files that are represented as data entities in the RO-Crate.
 prefixes:
-  schema:
-    prefix_prefix: schema
-    prefix_reference: http://schema.org/
+  schema: http://schema.org/
 slots:
   name:
     name: name
@@ -96,6 +95,7 @@ classes:
       - description
       - name
       - url
+    class_uri: schema:Thing
   CreativeWork:
     name: CreativeWork
     comments:
@@ -104,11 +104,13 @@ classes:
     is_a: Thing
     slots:
       - hasPart
+    class_uri: schema:CreativeWork
   Dataset:
     name: Dataset
     comments:
     - A body of structured information describing some topic(s) of interest.
     is_a: CreativeWork
+    class_uri: schema:Dataset
   MediaObject:
     name: MediaObject
     comments:
