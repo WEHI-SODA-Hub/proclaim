@@ -3,33 +3,37 @@ id: https://w3id.org/ro/wfrun/process/0.5
 version: 0.0.1
 description: |
   This profile is used to describe the execution of an implicit workflow, indicating that one or more computational tools have been executed, typically generating some result files that are represented as data entities in the RO-Crate.
+license: Apache-2.0
+created_by: https://github.com/ResearchObject/workflow-run-crate/graphs/contributors
 prefixes:
   schema: http://schema.org/
+imports:
+  - https://w3id.org/linkml/types
 slots:
   name:
     name: name
     comments:
     - The name of the item.
     slot_uri: schema:name
-    range: Text
+    range: string
   description:
     name: description
     comments:
     - A description of the item.
     slot_uri: schema:description
-    range: TextObject
+    range: string
   url:
     name: url
     comments:
     - URL of the item.
     slot_uri: schema:url
-    range: URL
+    range: uri
   softwareVersion:
     name: softwareVersion
     comments:
     - Version of the software instance.
     slot_uri: schema:softwareVersion
-    range: Text
+    range: string
   encodingFormat:
     name: encodingFormat
     comments:
@@ -46,7 +50,7 @@ slots:
       Unregistered or niche encoding and file formats can be indicated instead via
       the most appropriate URL, e.g. defining Web page or a Wikipedia/Wikidata entry.'
     slot_uri: schema:encodingFormat
-    range: Text
+    range: string
   agent:
     name: agent
     comments:
@@ -78,7 +82,7 @@ slots:
       even when describing dates with times. This situation may be clarified in future
       revisions.
     slot_uri: schema:endTime
-    range: Time
+    range: time
   hasPart:
     name: hasPart
     comments:
@@ -146,3 +150,10 @@ classes:
     - instrument
     - agent
     class_uri: schema:Action
+  Organization:
+    name: Organization
+    comments:
+    - An organization such as a school, NGO, corporation, club, etc.
+    is_a: Thing
+    slots:
+    class_uri: schema:Organization
