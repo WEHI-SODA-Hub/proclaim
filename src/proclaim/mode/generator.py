@@ -12,6 +12,8 @@ from linkml_runtime.utils.schemaview import SchemaView
 
 from linkml._version import __version__
 from linkml.utils.generator import Generator, shared_arguments
+from linkml.generators.jsonldcontextgen import ContextGenerator
+import json
 
 import proclaim.mode.schema as mode
 
@@ -42,10 +44,19 @@ def convert_slot(slot_name: str, sv: SchemaView) -> mode.Input:
 
     if slot.slot_uri is None:
         raise Exception("Each slot must have an IRI in order to convert to a mode file")
+
+    description = slot.description
+    if description is None:
+        if isinstance(slot.comments, str):
+            description = slot.comments
+        elif isinstance(slot.comments, list):
+            description = "\n".join(slot.comments)
+
     return mode.Input(
         id=sv.get_uri(cast(ElementName, slot.name), expand=True),
         name=slot.name,
-        label=slot.title,
+        label=slot.name,
+        help=fail_unless(description, "slot description or comments"),
         multiple=Bool(slot.multivalued or False),
         required=Bool(slot.required or False),
         hide=False,
@@ -56,6 +67,9 @@ def convert_slot(slot_name: str, sv: SchemaView) -> mode.Input:
 
 @dataclass
 class RoCrateModeGenerator(Generator):
+    """"
+    Converts LinkML schema into a Crate-O compatible mode file
+    """
     visit_all_class_slots: ClassVar[bool] = True
     valid_formats: ClassVar[list[str]] = ["crateo-mode"]
     uses_schemaloader: ClassVar[bool] = False
@@ -67,18 +81,20 @@ class RoCrateModeGenerator(Generator):
         sv = SchemaView(self.schema)
         # parse version
         version = parse_version(fail_unless(sv.schema.version, "version"))
-        mode_file = mode.ModeFile(
+        return mode.ModeFile(
             metadata=mode.Metadata(
                 name=fail_unless(sv.schema.name, "name"),
                 description=fail_unless(sv.schema.description, "description"),
                 # Approximate the version as a float, e.g. 1.2.3 -> 1.23
-                version=float(f"{version.major}.{version.minor}{version.micro}")
+                version=float(f"{version.major}.{version.minor}{version.micro}"),
+                license=fail_unless(sv.schema.license, "license"),
+                author=fail_unless(sv.schema.created_by, "created_by"),
             ),
             classes={
                 key: convert_class(value, sv) for key, value in sv.all_classes().items()
             },
+            context=json.loads(ContextGenerator(schema=sv.schema).serialize())
         )
-        return mode_file
 
     def serialize(self, **kwargs) -> str:
         return self.make_mode().model_dump_json(indent=4)
