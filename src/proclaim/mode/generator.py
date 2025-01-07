@@ -7,7 +7,6 @@ from linkml_runtime.linkml_model.meta import ElementName
 import click
 from linkml_runtime.linkml_model.meta import (
     ClassDefinition,
-    SlotDefinition,
 )
 from linkml_runtime.utils.schemaview import SchemaView
 
@@ -63,18 +62,6 @@ class RoCrateModeGenerator(Generator):
     requires_metamodel: ClassVar[bool] = False
 
     mode_file_template: Path | None = None
-    # mode_file: mode.ModeFile | None = None
-    # name: str | None = None
-    # description: str | None = None
-    # version: float | None = None
-    # classes: mode.Classes = field(default_factory=dict)
-    # lookup: mode.Lookups = None
-    # context: mode.Context = None
-    # input_groups: mode.InputGroups = None
-    # resolve: mode.Resolve = None
-
-    # def __post_init__(self) -> None:
-    #     self.schemaview = SchemaView(self.schema)
 
     def make_mode(self) -> mode.ModeFile:
         sv = SchemaView(self.schema)
@@ -95,31 +82,6 @@ class RoCrateModeGenerator(Generator):
 
     def serialize(self, **kwargs) -> str:
         return self.make_mode().model_dump_json(indent=4)
-
-
-    # def visit_schema(self, **kwargs) -> Optional[str]:
-    #     """Visited once at the beginning of generation
-
-    #     @param kwargs: Arguments passed through from CLI -- implementation dependent
-    #     """
-    #     self.schema
-    #     if self.name is None:
-    #         raise Exception("The name field, which is mandatory, is missing")
-    #     if self.version is None:
-    #         raise Exception("The version field is mandatory")
-    #     if self.description is None:
-    #         raise Exception("The description field is mandatory")
-
-    #     self.mode_file = mode.ModeFile(metadata=mode.Metadata(name=self.name, description=self.description, version=self.version), classes=self.classes, lookup=self.lookup, context=self.context, inputGroups=self.input_groups, resolve=self.resolve)
-
-    # def end_schema(self, **kwargs) -> Optional[str]:
-    #     """Visited once at the end of generation
-
-    #     @param kwargs: Arguments passed through from CLI -- implementation dependent
-    #     """
-    #     if self.mode_file is not None:
-    #         return self.mode_file.model_dump_json()
-
 
 @shared_arguments(RoCrateModeGenerator)
 @click.command(name="crato-mode")
