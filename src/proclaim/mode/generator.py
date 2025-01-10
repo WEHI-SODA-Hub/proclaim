@@ -70,7 +70,6 @@ class RoCrateModeGenerator(Generator):
     """"
     Converts LinkML schema into a Crate-O compatible mode file
     """
-    visit_all_class_slots: ClassVar[bool] = True
     valid_formats: ClassVar[list[str]] = ["crateo-mode"]
     uses_schemaloader: ClassVar[bool] = False
     requires_metamodel: ClassVar[bool] = False
