@@ -18,7 +18,8 @@ classifiers = [
 dependencies = [
     "linkml",
     "click",
-    "linkml_runtime"
+    "linkml_runtime",
+    "mkdocs"
 ]
 
 [project.scripts]
