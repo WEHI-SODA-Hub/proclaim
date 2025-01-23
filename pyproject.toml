@@ -19,8 +19,12 @@ dependencies = [
     "linkml",
     "click",
     "linkml_runtime",
-    "mkdocs"
+    "mkdocs",
+    "rdfcrate>=0.2.0",
 ]
 
 [project.scripts]
 generate-mode = "proclaim.mode.generator:cli"
+
+[tool.uv.sources]
+rdfcrate = { git = "https://github.com/WEHI-SODA-Hub/RdfCrate" }

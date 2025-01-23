@@ -1,0 +1,17 @@
+# {{ sv.schema.name }}
+
+{{ sv.schema.description | mandatory("A LinkML schema must have a `description` field to be converted to an RO-Crate Profile") }}
+
+## Classes
+{% for cname, cls in sv.all_classes().items() %}
+### {{ cname }}
+
+{{ cls | description }}
+
+Name | Description | Range
+--- | --- | ---
+{% for sname in sv.class_slots(cls.name) %}
+{% set slot = sv.induced_slot(slot_name=sname, class_name=cname) %}
+`{{ sname }}` | {{ slot | description }} | `{{ slot.range }}`
+{% endfor %}
+{% endfor %}
