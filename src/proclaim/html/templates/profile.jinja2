@@ -1,9 +1,10 @@
-# {{ sv.schema.name }}
+# {{ sv.schema.name }} Profile
 
 {{ sv.schema.description | mandatory("A LinkML schema must have a `description` field to be converted to an RO-Crate Profile") }}
 
 ## Classes
 {% for cname, cls in sv.all_classes().items() %}
+
 ### {{ cname }}
 
 {{ cls | description }}
