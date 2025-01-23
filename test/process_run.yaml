@@ -8,152 +8,100 @@ created_by: https://github.com/ResearchObject/workflow-run-crate/graphs/contribu
 prefixes:
   schema: http://schema.org/
 imports:
-  - https://w3id.org/linkml/types
+  - ./schema_org.yaml
+comments:
+  - The classes and slots defined here are restricted to https://github.com/ResearchObject/ro-terms/tree/master/workflow-run, ie the custom vocabulary for the workflow-run ecosystem.
+  - This is a test schema, so is not comprehensive
+  - Adapted from https://github.com/ResearchObject/ro-terms/blob/master/workflow-run/wfrun.ttl
 slots:
-  name:
-    name: name
+  tag:
     comments:
-    - The name of the item.
-    slot_uri: schema:name
-    range: string
-  description:
-    name: description
+    - A tag assigned to a software product, such as a container image
+    slot_uri: wfrun:tag
+    range: Text
+  resourceUsage:
     comments:
-    - A description of the item.
-    slot_uri: schema:description
-    range: string
-  url:
-    name: url
+    - A resource usage item, such as peak memory
+    slot_uri: wfrun:resourceUsage
+    range: PropertyValue
+  sourceParameter:
     comments:
-    - URL of the item.
-    slot_uri: schema:url
-    range: uri
-  softwareVersion:
-    name: softwareVersion
+    - The source (upstream) parameter
+    slot_uri: wfrun:sourceParameter
+    range: FormalParameter
+  containerImage:
     comments:
-    - Version of the software instance.
-    slot_uri: schema:softwareVersion
-    range: string
-  encodingFormat:
-    name: encodingFormat
+    - A container image associated with this entity
+    slot_uri: wfrun:containerImage
+    range: URL
+  environment:
     comments:
-    - 'Media type typically expressed using a MIME format (see [IANA site](http://www.iana.org/assignments/media-types/media-types.xhtml)
-      and [MDN reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types)),
-      e.g. application/zip for a SoftwareApplication binary, audio/mpeg for .mp3 etc.
-
-
-      In cases where a [[CreativeWork]] has several media type representations, [[encoding]]
-      can be used to indicate each [[MediaObject]] alongside particular [[encodingFormat]]
-      information.
-
-
-      Unregistered or niche encoding and file formats can be indicated instead via
-      the most appropriate URL, e.g. defining Web page or a Wikipedia/Wikidata entry.'
-    slot_uri: schema:encodingFormat
-    range: string
-  agent:
-    name: agent
+    - Environment variables used by the application
+    slot_uri: wfrun:environment
+    range: FormalParameter
+  sha256:
     comments:
-    - The direct performer or driver of the action (animate or inanimate). E.g. *John*
-      wrote a book.
-    slot_uri: schema:agent
-    range: Organization
-  result:
-    name: result
+    - sha256 checksum as a hexadecimal string
+    slot_uri: wfrun:sha256
+    range: Text
+  targetParameter:
     comments:
-    - The result produced in the action. E.g. John wrote *a book*.
-    slot_uri: schema:result
-    range: Thing
-  instrument:
-    name: instrument
+    - The target (downstream) parameter
+    slot_uri: wfrun:targetParameter
+    range: FormalParameter
+  registry:
     comments:
-    - The object that helped the agent perform the action. E.g. John wrote a book
-      with *a pen*.
-    slot_uri: schema:instrument
-    range: Thing
-  endTime:
-    name: endTime
+    - A service to register software products, such as container images
+    slot_uri: wfrun:registry
+    range: Text
+  sha512:
     comments:
-    - The endTime of something. For a reserved event or service (e.g. FoodEstablishmentReservation),
-      the time that it is expected to end. For actions that span a period of time,
-      when the action was performed. E.g. John wrote a book from January to *December*.
-      For media, including audio and video, it's the time offset of the end of a clip
-      within a larger file.\n\nNote that Event uses startDate/endDate instead of startTime/endTime,
-      even when describing dates with times. This situation may be clarified in future
-      revisions.
-    slot_uri: schema:endTime
-    range: time
-  hasPart:
-    name: hasPart
+    - sha512 checksum as a hexadecimal string
+    slot_uri: wfrun:sha512
+    range: Text
+  sha1:
     comments:
-    - Indicates an item or CreativeWork that is part of this item, or CreativeWork
-      (in some sense).
-    slot_uri: schema:hasPart
-    range: CreativeWork
+    - sha1 checksum as a hexadecimal string
+    slot_uri: wfrun:sha1
+    range: Text
+  connection:
+    comments:
+    - A parameter connection created by this workflow
+    slot_uri: wfrun:connection
+    range: ParameterConnection
+  md5:
+    comments:
+    - md5 checksum as a hexadecimal string
+    slot_uri: wfrun:md5
+    range: Text
 classes:
-  Thing:
-    name: Thing
+  DockerImage:
     comments:
-    - The most generic type of item.
+    - A Docker container image
+    is_a: ContainerImage
+    class_uri: wfrun:DockerImage
+  SIFImage:
+    comments:
+    - A Singularity Image Format container image
+    is_a: ContainerImage
+    class_uri: wfrun:SIFImage
+  ParameterConnection:
+    comments:
+    - A connection between parameters of different applications
+    is_a: Intangible
     slots:
-      - description
-      - name
-      - url
-    class_uri: schema:Thing
-  CreativeWork:
-    name: CreativeWork
+    - sourceParameter
+    - targetParameter
+    class_uri: wfrun:ParameterConnection
+  ContainerImage:
     comments:
-    - The most generic kind of creative work, including books, movies, photographs,
-      software programs, etc.
-    is_a: Thing
-    slots:
-      - hasPart
-    class_uri: schema:CreativeWork
-  Dataset:
-    name: Dataset
-    comments:
-    - A body of structured information describing some topic(s) of interest.
-    is_a: CreativeWork
-    class_uri: schema:Dataset
-  MediaObject:
-    name: MediaObject
-    comments:
-    - A media object, such as an image, video, audio, or text object embedded in a
-      web page or a downloadable dataset i.e. DataDownload. Note that a creative work
-      may have many media objects associated with it on the same web page. For example,
-      a page about a single song (MusicRecording) may have a music video (VideoObject),
-      and a high and low bandwidth audio stream (2 AudioObject's).
+    - A containerisation software container image
     is_a: CreativeWork
     slots:
-    - endTime
-    - encodingFormat
-    class_uri: schema:MediaObject
-  SoftwareApplication:
-    name: SoftwareApplication
-    comments:
-    - A software application.
-    is_a: CreativeWork
-    slots:
-    - softwareVersion
-    class_uri: schema:SoftwareApplication
-  Action:
-    name: Action
-    comments:
-    - An action performed by a direct agent and indirect participants upon a direct
-      object. Optionally happens at a location with the help of an inanimate instrument.
-      The execution of the action may produce a result. Specific action sub-type documentation
-      specifies the exact expectation of each argument/role.\n\nSee also [blog post](http://blog.schema.org/2014/04/announcing-schemaorg-actions.html)
-      and [Actions overview document](https://schema.org/docs/actions.html).
-    is_a: Thing
-    slots:
-    - result
-    - instrument
-    - agent
-    class_uri: schema:Action
-  Organization:
-    name: Organization
-    comments:
-    - An organization such as a school, NGO, corporation, club, etc.
-    is_a: Thing
-    slots:
-    class_uri: schema:Organization
+    - tag
+    - sha256
+    - registry
+    - sha512
+    - sha1
+    - md5
+    class_uri: wfrun:ContainerImage
