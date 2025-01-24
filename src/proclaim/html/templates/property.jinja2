@@ -1,0 +1,15 @@
+# Property: {{ slot.name }}
+
+{{ slot | description }}
+
+## Range
+
+{% for ename in sv.slot_range_as_union(slot) %}
+* `{{ ename }}`
+{% endfor %}
+
+## Domain
+
+{% for cname in (slot | domain) %}
+* `{{ cname }}`
+{% endfor %}

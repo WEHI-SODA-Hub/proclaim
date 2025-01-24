@@ -8,7 +8,8 @@ created_by: https://github.com/ResearchObject/workflow-run-crate/graphs/contribu
 prefixes:
   schema: http://schema.org/
 imports:
-  - ./schema_org.yaml
+  - ./schemaorg_current
+  - ./formal_parameter
 comments:
   - The classes and slots defined here are restricted to https://github.com/ResearchObject/ro-terms/tree/master/workflow-run, ie the custom vocabulary for the workflow-run ecosystem.
   - This is a test schema, so is not comprehensive
