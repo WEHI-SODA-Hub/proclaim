@@ -6,6 +6,7 @@ import contextlib
 from linkml._version import __version__
 from linkml.utils.generator import Generator
 import tempfile
+from linkml_runtime import SchemaView
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -20,7 +21,19 @@ class ProfileHtmlGenerator(Generator):
     valid_formats: ClassVar[list[str]] = ["html"]
 
     # Without this, the relative imports are broken
-    uses_schemaloader = False
+    uses_schemaloader: ClassVar[bool] = False
+
+    # def __post_init__(self):
+    #     # The default schemaview is cooked. It seems to set the wrong base path, so all imports from it fail
+    #     # Thus, we replace it with a working SchemaView here
+    #     if isinstance(self.schema, (str, Path)):
+    #         schema_path = Path(self.schema)
+    #     else:
+    #         schema_path = Path(self.schema.source_file)
+    #     with contextlib.chdir(schema_path.parent):
+    #         self.schemaview = SchemaView(self.schema)
+    #         self.schemaview.imports_closure()
+    #     super().__post_init__()
 
     def to_markdown(self, template: str, **kwargs) -> str:
         env = Environment(

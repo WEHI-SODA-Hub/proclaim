@@ -8,9 +8,9 @@ version = "0.0.1"
 authors = [
     {name = "Michael Milton", email = "michael.r.milton@gmail.com"},
 ]
-description = "My package description"
+description = "Create RO-Crate profiles from LinkML schemas"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -24,7 +24,15 @@ dependencies = [
 ]
 
 [project.scripts]
-generate-mode = "proclaim.mode.generator:cli"
+proclaim-mode = "proclaim.mode.generator:cli"
+proclaim-profile = "proclaim.profile_crate.generator:cli"
+
+[tool.uv]
+dev-dependencies = [
+    "bash-kernel>=0.10.0",
+    "nbclient>=0.10.2",
+    "nbformat>=5.10.4",
+]
 
 [tool.uv.sources]
 rdfcrate = { git = "https://github.com/WEHI-SODA-Hub/RdfCrate" }

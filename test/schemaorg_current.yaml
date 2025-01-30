@@ -1,7 +1,7 @@
 name: schemaorg-current-https
 id: https://schema.org
 imports:
-- linkml:typestest/schemaorg_current.yaml
+- linkml:types
 prefixes:
   linkml:
     prefix_prefix: linkml

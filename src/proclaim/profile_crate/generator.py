@@ -14,13 +14,17 @@ from linkml_runtime.dumpers.yaml_dumper import YAMLDumper
 
 from linkml._version import __version__
 from linkml.utils.generator import Generator, shared_arguments
-from linkml.generators.jsonldcontextgen import ContextGenerator
-from linkml.generators.docgen import DocGenerator
 from linkml.generators.shaclgen import ShaclGenerator
+from proclaim.html.generator import ProfileHtmlGenerator
 from proclaim.profile_crate import schema
 from rdflib import Graph, Literal, Namespace, RDF, PROF, URIRef, DC, DCTERMS, BNode
 from proclaim.mode.generator import RoCrateModeGenerator
 from rdfcrate import AttachedCrate, uris, spec_version
+
+from proclaim.util import mandatory
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 # HTTP version of Schema.org
 SDO = Namespace("http://schema.org/")
@@ -83,36 +87,38 @@ class ProfileCrateGenerator(Generator):
 
         crate.write()
 
-    def make_html(self, directory: str) -> str:
-        # Build markdown into docs directory
-        gen = DocGenerator(schema=self.schema, directory=directory)
-        gen.serialize()
-
-        
-
     def serialize(self, directory: str, **kwargs) -> None:
         dir_path = Path(directory)
-        crate_path = dir_path / "crate"
+        base_dir = str(Path(self.schema.source_file).parent)
 
         # Docs
-        DocGenerator(schema=self.schema, directory=directory).serialize()
-        # TODO: Compile to HTML
+        logger.info(f"Writing HTML")
+        ProfileHtmlGenerator(schema=self.schema).serialize(directory=directory)
+        logger.info(f"Finished writing HTML")
 
         # SHACL
+        logger.info(f"Writing SHACL (this takes a while)")
         shacl = dir_path / "shapes.ttl"
-        shacl.write_text(ShaclGenerator(schema=self.schema).serialize())
+        shacl.write_text(ShaclGenerator(schema=self.schema, base_dir=base_dir).serialize())
+        logger.info(f"Finished writing SHACL")
 
         # LinkML
+        logger.info(f"Writing LinkML")
         sv = SchemaView(self.schema)
         linkml_schema = dir_path / "linkml.yml"
         YAMLDumper().dump(sv.schema, linkml_schema)
+        logger.info(f"Finished writing LinkML")
 
         # Mode File
+        logger.info(f"Writing Crate-O Mode File")
         mode = dir_path / "mode.json"
-        mode.write_text(RoCrateModeGenerator(schema=self.schema).serialize())
+        mode.write_text(RoCrateModeGenerator(schema=self.schema, base_dir=base_dir).serialize())
+        logger.info(f"Finished writing Crate-O Mode File")
 
         # RO-Crate Profile
+        logger.info(f"Writing ro-crate-metadata.json")
         self.make_graph(dir_path, sv)
+        logger.info(f"Finished writing ro-crate-metadata.json")
 
 @shared_arguments(ProfileCrateGenerator)
 @click.command(name="rocrate-profile")
@@ -122,7 +128,8 @@ class ProfileCrateGenerator(Generator):
     help=f"Directory into which the RO-Crate Profile will be written",
 )
 def cli(yamlfile: str, output_dir: Path, **kwargs: Any):
-    print(ProfileCrateGenerator(yamlfile).serialize(str(output_dir), **kwargs))
+    logger.setLevel("INFO")
+    ProfileCrateGenerator(yamlfile, base_dir=str(Path(yamlfile).parent)).serialize(str(output_dir), **kwargs)
 
 if __name__ == "__main__":
     cli()

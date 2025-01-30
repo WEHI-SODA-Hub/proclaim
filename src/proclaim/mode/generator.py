@@ -92,7 +92,7 @@ class RoCrateModeGenerator(Generator):
             classes={
                 key: convert_class(value, sv) for key, value in sv.all_classes().items()
             },
-            context=json.loads(ContextGenerator(schema=sv.schema).serialize())
+            context=json.loads(ContextGenerator(schema=sv.schema, base_dir=self.base_dir).serialize())
         )
 
     def serialize(self, **kwargs) -> str:
