@@ -127,8 +127,8 @@ class ProfileCrateGenerator(Generator):
     "--output-dir",
     help=f"Directory into which the RO-Crate Profile will be written",
 )
-def cli(yamlfile: str, output_dir: Path, **kwargs: Any):
-    logger.setLevel("INFO")
+def cli(yamlfile: str, output_dir: Path, log_level: str, **kwargs: Any):
+    logger.setLevel(log_level or "INFO")
     ProfileCrateGenerator(yamlfile, base_dir=str(Path(yamlfile).parent)).serialize(str(output_dir), **kwargs)
 
 if __name__ == "__main__":

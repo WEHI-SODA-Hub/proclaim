@@ -10,6 +10,7 @@ from linkml_runtime import SchemaView
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 from jinja2 import Environment, PackageLoader, select_autoescape
+from shutil import copytree, copy
 
 from proclaim.util import mandatory, description, domain, remove_newlines
 
@@ -79,3 +80,9 @@ class ProfileHtmlGenerator(Generator):
 
             with contextlib.chdir(_build_dir):
                 build(load_config(**config, site_name=self.schema.name, markdown_extensions=["tables"], site_dir=directory))
+
+            for f in build_dir.iterdir():
+                if f.is_file():
+                    copy(f, Path(directory) / f.name)
+                else:
+                    copytree(f, Path(directory) / f.name)
