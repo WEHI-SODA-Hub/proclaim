@@ -80,6 +80,26 @@ proclaim-profile test/process_run.yaml --output-dir process_run_profile/
     WARNING:linkml.utils.generator:No namespace defined for URI: http://data.europa.eu/eli/ontology#Format
     WARNING:linkml.utils.generator:No namespace defined for URI: http://www.w3.org/ns/regorg#RegisteredOrganization
 
+Here are some notable outputs, hosted on GitHub pages:
+
+- [`index.html`](https://wehi-soda-hub.github.io/proclaim/index.html)
+- Vocabulary Pages HTML such as:
+  - [`ContainerImage` type
+    definition](https://wehi-soda-hub.github.io/proclaim/classes/ContainerImage/)
+  - [`containerImage` property
+    definition](https://wehi-soda-hub.github.io/proclaim/properties/containerImage/)
+- [`ro-crate-metadata.json`](https://wehi-soda-hub.github.io/proclaim/ro-crate-metadata.json):
+  The profile crate metadata which describes the profile itself
+- [`shapes.ttl`](https://wehi-soda-hub.github.io/proclaim/shapes.ttl):
+  The SHACL schema
+- [`mode.json`](https://wehi-soda-hub.github.io/proclaim/mode.json): The
+  Crate-O mode
+- [`linkml.yml`](https://wehi-soda-hub.github.io/proclaim/linkml.yml): A
+  copy of the original schema
+
+The full contents of the crate include a lot of HTML, CSS and JS that
+power the HTML described above:
+
 ``` bash
 tree process_run_profile/
 ```
