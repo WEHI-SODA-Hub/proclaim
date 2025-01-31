@@ -1,7 +1,6 @@
 from proclaim.html.generator import ProfileHtmlGenerator
 import tempfile
 from pathlib import Path
-import contextlib
 
 def test_html_generator(process_run: str):
     with tempfile.TemporaryDirectory() as _tmp:

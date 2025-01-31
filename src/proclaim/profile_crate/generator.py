@@ -1,14 +1,8 @@
-from dataclasses import dataclass, field
-from io import StringIO
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, ClassVar, cast, TypeVar
-from packaging.version import parse as parse_version
-from linkml_runtime.linkml_model.meta import ElementName
+from typing import Any, ClassVar
 
 import click
-from linkml_runtime.linkml_model.meta import (
-    ClassDefinition,
-)
 from linkml_runtime.utils.schemaview import SchemaView
 from linkml_runtime.dumpers.yaml_dumper import YAMLDumper
 
@@ -16,8 +10,7 @@ from linkml._version import __version__
 from linkml.utils.generator import Generator, shared_arguments
 from linkml.generators.shaclgen import ShaclGenerator
 from proclaim.html.generator import ProfileHtmlGenerator
-from proclaim.profile_crate import schema
-from rdflib import Graph, Literal, Namespace, RDF, PROF, URIRef, DC, DCTERMS, BNode
+from rdflib import Literal, Namespace, PROF, URIRef, BNode
 from proclaim.mode.generator import RoCrateModeGenerator
 from rdfcrate import AttachedCrate, uris, spec_version
 
@@ -127,8 +120,8 @@ class ProfileCrateGenerator(Generator):
     "--output-dir",
     help=f"Directory into which the RO-Crate Profile will be written",
 )
-def cli(yamlfile: str, output_dir: Path, log_level: str, **kwargs: Any):
-    logger.setLevel(log_level or "INFO")
+def cli(yamlfile: str, output_dir: Path, **kwargs: Any):
+    # getLogger("linkml.utils.generator").setLevel("ERROR")
     ProfileCrateGenerator(yamlfile, base_dir=str(Path(yamlfile).parent)).serialize(str(output_dir), **kwargs)
 
 if __name__ == "__main__":

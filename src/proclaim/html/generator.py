@@ -6,7 +6,6 @@ import contextlib
 from linkml._version import __version__
 from linkml.utils.generator import Generator
 import tempfile
-from linkml_runtime import SchemaView
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -23,18 +22,6 @@ class ProfileHtmlGenerator(Generator):
 
     # Without this, the relative imports are broken
     uses_schemaloader: ClassVar[bool] = False
-
-    # def __post_init__(self):
-    #     # The default schemaview is cooked. It seems to set the wrong base path, so all imports from it fail
-    #     # Thus, we replace it with a working SchemaView here
-    #     if isinstance(self.schema, (str, Path)):
-    #         schema_path = Path(self.schema)
-    #     else:
-    #         schema_path = Path(self.schema.source_file)
-    #     with contextlib.chdir(schema_path.parent):
-    #         self.schemaview = SchemaView(self.schema)
-    #         self.schemaview.imports_closure()
-    #     super().__post_init__()
 
     def to_markdown(self, template: str, **kwargs) -> str:
         env = Environment(
@@ -78,10 +65,11 @@ class ProfileHtmlGenerator(Generator):
                 md = self.to_markdown("class.jinja2", cls=cls, cname=cname)
                 (classes / f"{cname}.md").write_text(md)
 
+            html_dir = build_dir / "html"
             with contextlib.chdir(_build_dir):
-                build(load_config(**config, site_name=self.schema.name, markdown_extensions=["tables"], site_dir=directory))
+                build(load_config(**config, site_name=self.schema.name, markdown_extensions=["tables"], site_dir=str(html_dir)))
 
-            for f in build_dir.iterdir():
+            for f in html_dir.iterdir():
                 if f.is_file():
                     copy(f, Path(directory) / f.name)
                 else:
