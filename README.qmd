@@ -1,0 +1,58 @@
+---
+jupyter: 'bash'
+format: 'gfm'
+---
+# PROCLaim (Profiles in RO-Crate from LinkML)
+
+Generate spec-conformant RO-Crate profile crates from a user friendly LinkML schema.
+
+Running PROCLaim on a LinkML schema gives you a [Profile Crate](https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/profiles.html#profile-crate) containing:
+
+* Human readable HTML documentation for your profile
+* Human-readable vocabulary pages for your custom types and properties
+* `ro-crate-metadata.json` that describes the profile
+* SHACL shapes for validating against your profile
+* Mode file compatible with the [Crate-O GUI](https://github.com/Language-Research-Technology/crate-o)
+* A copy of the original LinkML schema
+
+## Motivation
+
+The upcoming RO-Crate 1.2 release adds support for [profiles](https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/profiles.html), which allow you to define an extension of the RO-Crate specification, with new types, properties and validations.
+However, there are several steps you have to follow to follow best practices.
+You need to:
+
+* Create an HTML document describing your profile to humans
+* Create an `ro-crate-metadata.json` that describes your profile in RDF
+* Define validations for your profile using SHACL or some other validation system
+* Write integrations with tools such as the Crate-O GUI
+* Create a resolvable URL for each of your new properties and types
+
+Not only does this require learning several different specifications, but it's also different to keep all of this in sync when you want to make a change.
+PROCLaim solves this by making a single LinkML schema the source of truth for your profile.
+LinkML is written in YAML, and has excellent documentation and tooling that you can rely on to build your schema.
+
+## Installation
+
+```bash
+pip install git+https://github.com/WEHI-SODA-Hub/proclaim.git
+```
+
+## Usage
+
+PROClaim is a Python library, but the main way you interact with it is via the `proclaim-profile` command-line tool.
+For example, assuming we already have [a complete LinkML schema](https://github.com/WEHI-SODA-Hub/proclaim/blob/main/test/process_run.yaml) describing the [Process Run Profile](https://www.researchobject.org/workflow-run-crate/profiles/process_run_crate/), we could do the following:
+
+```{bash}
+#| echo: false
+rm -rf process_run_profile/
+mkdir process_run_profile/
+```
+
+```{bash}
+proclaim-profile test/process_run.yaml --output-dir process_run_profile/
+```
+
+
+```{bash}
+tree process_run_profile/
+```
