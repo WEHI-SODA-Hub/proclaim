@@ -1,0 +1,104 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.2-DRAFT/context",
+  "@graph": [
+    {
+      "@id": "linkml.yml",
+      "@type": "File",
+      "name": "LinkML Schema"
+    },
+    {
+      "@id": "mode.json",
+      "@type": "File",
+      "encodingFormat": "application/json",
+      "name": "Crate-O Mode File"
+    },
+    {
+      "@id": "index.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Human readable profile description"
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "datePublished": "2025-02-06T18:50:20.137408",
+      "description": "This profile is used to describe the execution of an implicit workflow, indicating that one or more computational tools have been executed, typically generating some result files that are represented as data entities in the RO-Crate.\n",
+      "hasPart": [
+        {
+          "@id": "index.html"
+        },
+        {
+          "@id": "shapes.ttl"
+        },
+        {
+          "@id": "linkml.yml"
+        },
+        {
+          "@id": "mode.json"
+        }
+      ],
+      "license": "Apache-2.0",
+      "name": "ProcessRun"
+    },
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.2-DRAFT"
+      }
+    },
+    {
+      "@id": "shapes.ttl",
+      "@type": "File",
+      "conformsTo": {
+        "@id": "https://www.w3.org/TR/shacl/"
+      },
+      "description": "Provide validation of compliant crates",
+      "encodingFormat": "text/turtle",
+      "name": "SHACL Shapes"
+    },
+    {
+      "@id": "_:N11765d519a0e4f8e8e1ab0369e611675",
+      "@type": "ResourceDescriptor",
+      "hasArtifact": {
+        "@id": "shapes.ttl"
+      },
+      "hasRole": {
+        "@id": "profrole:validation"
+      }
+    },
+    {
+      "@id": "_:N4d7ac754ebd64440b225fe3bda58904a",
+      "@type": "ResourceDescriptor",
+      "hasArtifact": {
+        "@id": "index.html"
+      },
+      "hasRole": {
+        "@id": "profrole:specification"
+      }
+    },
+    {
+      "@id": "_:Ncc9e9f2934e84364a776f45ceac00c28",
+      "@type": "ResourceDescriptor",
+      "hasArtifact": {
+        "@id": "mode.json"
+      },
+      "hasRole": {
+        "@id": "profrole:mode"
+      }
+    },
+    {
+      "@id": "_:N6a8f733635a94c33a446f628d24ebd8d",
+      "@type": "ResourceDescriptor",
+      "hasArtifact": {
+        "@id": "linkml.yml"
+      },
+      "hasRole": {
+        "@id": "profrole:schema"
+      }
+    }
+  ]
+}

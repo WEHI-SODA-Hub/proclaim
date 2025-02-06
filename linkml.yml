@@ -1,0 +1,164 @@
+name: ProcessRun
+description: 'This profile is used to describe the execution of an implicit workflow,
+  indicating that one or more computational tools have been executed, typically generating
+  some result files that are represented as data entities in the RO-Crate.
+
+  '
+comments:
+- The classes and slots defined here are restricted to https://github.com/ResearchObject/ro-terms/tree/master/workflow-run,
+  ie the custom vocabulary for the workflow-run ecosystem.
+- This is a test schema, so is not comprehensive
+- Adapted from https://github.com/ResearchObject/ro-terms/blob/master/workflow-run/wfrun.ttl
+created_by: https://github.com/ResearchObject/workflow-run-crate/graphs/contributors
+id: https://w3id.org/ro/wfrun/process/0.5
+version: 0.0.1
+imports:
+- ./schemaorg_current
+- ./formal_parameter
+license: Apache-2.0
+prefixes:
+  schema:
+    prefix_prefix: schema
+    prefix_reference: http://schema.org/
+default_prefix: https://w3id.org/ro/wfrun/process/0.5/
+slots:
+  tag:
+    name: tag
+    comments:
+    - A tag assigned to a software product, such as a container image
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:tag
+    domain_of:
+    - ContainerImage
+    range: Text
+  resourceUsage:
+    name: resourceUsage
+    comments:
+    - A resource usage item, such as peak memory
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:resourceUsage
+    range: PropertyValue
+  sourceParameter:
+    name: sourceParameter
+    comments:
+    - The source (upstream) parameter
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:sourceParameter
+    domain_of:
+    - ParameterConnection
+    range: FormalParameter
+  containerImage:
+    name: containerImage
+    comments:
+    - A container image associated with this entity
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:containerImage
+    range: URL
+  environment:
+    name: environment
+    comments:
+    - Environment variables used by the application
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:environment
+    range: FormalParameter
+  sha256:
+    name: sha256
+    comments:
+    - sha256 checksum as a hexadecimal string
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:sha256
+    domain_of:
+    - ContainerImage
+    range: Text
+  targetParameter:
+    name: targetParameter
+    comments:
+    - The target (downstream) parameter
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:targetParameter
+    domain_of:
+    - ParameterConnection
+    range: FormalParameter
+  registry:
+    name: registry
+    comments:
+    - A service to register software products, such as container images
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:registry
+    domain_of:
+    - ContainerImage
+    range: Text
+  sha512:
+    name: sha512
+    comments:
+    - sha512 checksum as a hexadecimal string
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:sha512
+    domain_of:
+    - ContainerImage
+    range: Text
+  sha1:
+    name: sha1
+    comments:
+    - sha1 checksum as a hexadecimal string
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:sha1
+    domain_of:
+    - ContainerImage
+    range: Text
+  connection:
+    name: connection
+    comments:
+    - A parameter connection created by this workflow
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:connection
+    range: ParameterConnection
+  md5:
+    name: md5
+    comments:
+    - md5 checksum as a hexadecimal string
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    slot_uri: wfrun:md5
+    domain_of:
+    - ContainerImage
+    range: Text
+classes:
+  DockerImage:
+    name: DockerImage
+    comments:
+    - A Docker container image
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    is_a: ContainerImage
+    class_uri: wfrun:DockerImage
+  SIFImage:
+    name: SIFImage
+    comments:
+    - A Singularity Image Format container image
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    is_a: ContainerImage
+    class_uri: wfrun:SIFImage
+  ParameterConnection:
+    name: ParameterConnection
+    comments:
+    - A connection between parameters of different applications
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    is_a: Intangible
+    slots:
+    - sourceParameter
+    - targetParameter
+    class_uri: wfrun:ParameterConnection
+  ContainerImage:
+    name: ContainerImage
+    comments:
+    - A containerisation software container image
+    from_schema: https://w3id.org/ro/wfrun/process/0.5
+    is_a: CreativeWork
+    slots:
+    - tag
+    - sha256
+    - registry
+    - sha512
+    - sha1
+    - md5
+    class_uri: wfrun:ContainerImage
+source_file: /Users/milton.m/Programming/proclaim/test/process_run.yaml
