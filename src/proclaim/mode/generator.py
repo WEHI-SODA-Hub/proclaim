@@ -90,9 +90,12 @@ class RoCrateModeGenerator(Generator):
                 author=fail_unless(sv.schema.created_by, "created_by"),
             ),
             classes={
-                key: convert_class(value, sv) for key, value in sv.all_classes().items()
+                key: convert_class(value, sv) for key, value in sv.all_classes(imports=False).items()
             },
-            context=json.loads(ContextGenerator(schema=sv.schema, base_dir=self.base_dir).serialize())
+            # We don't pass the schema itself in, because ContextGenerator uses the old schema loader
+            # which doesn't understand relative imports properly unless we give it the absolute
+            # file path
+            context=json.loads(ContextGenerator(schema=sv.schema.source_file).serialize())
         )
 
     def serialize(self, **kwargs) -> str:

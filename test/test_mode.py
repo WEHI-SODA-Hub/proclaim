@@ -8,7 +8,11 @@ from proclaim.profile_crate.generator import ProfileCrateGenerator
 
 def test_mode_file_generation(process_run: str, process_run_sv: SchemaView):
     mode = RoCrateModeGenerator(schema=process_run).make_mode()
-    assert len(mode.classes) == len(process_run_sv.all_class())
+    mode_classes = set(mode.classes.keys())
+    assert len(mode_classes) == len(process_run_sv.all_class(imports=False))
+    assert mode_classes == {'ContainerImage', 'DockerImage', 'SIFImage', 'ParameterConnection'}
+    assert "Thing" not in mode_classes, "Schema.org classes should not be included in the mode file"
+    assert "MediaObject" not in mode_classes, "Schema.org classes should not be included in the mode file"
     for cname, mode_cls in mode.classes.items():
         assert len(mode_cls.inputs) == len(process_run_sv.class_slots(cname))
 
