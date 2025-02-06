@@ -41,7 +41,7 @@ class ProfileCrateGenerator(Generator):
             name=mandatory(sv.schema.name, "A LinkML schema must have a `name` field to be converted to an RO-Crate Profile"),
             description=mandatory(sv.schema.description, "A LinkML schema must have a `description` field to be converted to an RO-Crate Profile"),
             license=mandatory(sv.schema.license, "A LinkML schema must have a `license` field to be converted to an RO-Crate Profile"),
-            version=spec_version.ROCrate1_1
+            version=spec_version.ROCrate1_2
         )
 
         index = crate.register_file("index.html", attrs=[
