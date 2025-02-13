@@ -10,8 +10,9 @@ from linkml._version import __version__
 from linkml.utils.generator import Generator, shared_arguments
 from linkml.generators.shaclgen import ShaclGenerator
 from proclaim.html.generator import ProfileHtmlGenerator
-from rdflib import Literal, Namespace, PROF, URIRef, BNode
+from rdflib import Graph, Literal, Namespace, PROF, URIRef, BNode
 from proclaim.mode.generator import RoCrateModeGenerator
+from proclaim.vocabulary import VocabularyHtmlGenerator
 from rdfcrate import AttachedCrate, uris, spec_version
 
 from proclaim.util import mandatory
@@ -35,7 +36,7 @@ class ProfileCrateGenerator(Generator):
     requires_metamodel: ClassVar[bool] = False
     directory_output: bool = True
 
-    def make_graph(self, directory: Path, sv: SchemaView):
+    def make_graph(self, directory: Path, sv: SchemaView) -> Graph:
         crate = AttachedCrate(
             path=directory,
             name=mandatory(sv.schema.name, "A LinkML schema must have a `name` field to be converted to an RO-Crate Profile"),
@@ -43,6 +44,7 @@ class ProfileCrateGenerator(Generator):
             license=mandatory(sv.schema.license, "A LinkML schema must have a `license` field to be converted to an RO-Crate Profile"),
             version=spec_version.ROCrate1_2
         )
+        crate.graph.add((crate.metadata_entity, uris.name, Literal("RO-Crate Metadata File")))
 
         index = crate.register_file("index.html", attrs=[
             (uris.name, Literal(f"Human readable profile description"))
@@ -70,6 +72,14 @@ class ProfileCrateGenerator(Generator):
             (PROF.hasArtifact, linkml)
         ])
 
+        vocab = crate.register_dir("vocabulary", attrs=[
+            (uris.name, Literal("Vocabulary description"))
+        ])
+        crate.add_entity(BNode(), [PROF.ResourceDescriptor], attrs=[
+            (PROF.hasRole, PROF_ROLES["specification"]),
+            (PROF.hasArtifact, vocab)
+        ])
+
         mode = crate.register_file("mode.json", attrs=[
             (uris.name, Literal("Crate-O Mode File"))
         ])
@@ -79,15 +89,17 @@ class ProfileCrateGenerator(Generator):
         ])
 
         crate.write()
+        return crate.graph
 
     def serialize(self, directory: str, **kwargs) -> None:
         dir_path = Path(directory)
+        dir_path.mkdir(parents=True, exist_ok=True)
         base_dir = str(Path(self.schema.source_file).parent)
 
-        # Docs
-        logger.info(f"Writing HTML")
-        ProfileHtmlGenerator(schema=self.schema).serialize(directory=directory)
-        logger.info(f"Finished writing HTML")
+        # Vocab
+        logger.info(f"Writing vocabulary HTML")
+        VocabularyHtmlGenerator(schema=self.schema).serialize(directory=dir_path / "vocabulary")
+        logger.info(f"Finished writing vocabulary HTML")
 
         # SHACL
         logger.info(f"Writing SHACL (this takes a while)")
@@ -110,8 +122,17 @@ class ProfileCrateGenerator(Generator):
 
         # RO-Crate Profile
         logger.info(f"Writing ro-crate-metadata.json")
-        self.make_graph(dir_path, sv)
+        graph = self.make_graph(dir_path, sv)
         logger.info(f"Finished writing ro-crate-metadata.json")
+
+        # Docs
+        logger.info(f"Writing profile HTML")
+        ProfileHtmlGenerator(schema=self.schema, graph=graph).serialize(directory=dir_path / "docs")
+        # RO-Crate requires the index.html to be in the root of the crate, but it would be ugly to dump the whole site there,
+        # and also mkdocs doesn't support that. So we symlink it.
+        (dir_path / "index.html").symlink_to("docs/html/index.html")
+        logger.info(f"Finished writing profile HTML")
+
 
 @shared_arguments(ProfileCrateGenerator)
 @click.command(name="rocrate-profile")

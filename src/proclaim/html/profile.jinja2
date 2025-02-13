@@ -1,8 +1,17 @@
 # {{ sv.schema.name }} Profile
 
+## Crate Contents
+
+File Name | Description
+--- | ---
+{% for file_of_interest in ["ro-crate-metadata.json", "shapes.ttl", "mode.json", "linkml.yml", "index.html", "vocabulary/"] %}
+[`{{ file_of_interest }}`](/{{ file_of_interest }}) | {{ graph | file_description(file_of_interest) }}
+{% endfor %}
+
+## Profile Definition
+
 {{ sv.schema.description | mandatory("A LinkML schema must have a `description` field to be converted to an RO-Crate Profile") }}
 
-## Classes
 {% for cname, cls in sv.all_classes(imports=False).items() %}
 
 ### {{ cname }}
