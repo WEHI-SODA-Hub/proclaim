@@ -19,7 +19,7 @@ class ProfileHtmlGenerator(MkDocsGenerator):
     Converts LinkML schema into a single page HTML document that describes the profile
     """
     graph: Graph = Graph()
-    template_path: Traversable = files(__name__) / "profile.jinja2"
+    template_path: Traversable = files("proclaim.html") / "profile.jinja2"
 
     def get_globals(self) -> dict[str, Any]:
         return {
