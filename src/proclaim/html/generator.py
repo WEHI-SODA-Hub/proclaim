@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from importlib.resources.abc import Traversable
+from importlib.abc import Traversable
 from pathlib import Path
 from importlib.resources import files
-from typing import Any, Callable
+from typing import Any
 from linkml_runtime import SchemaView
 
 from linkml._version import __version__
