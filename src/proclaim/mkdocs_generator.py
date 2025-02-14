@@ -1,20 +1,19 @@
 from abc import abstractmethod, ABC
-from dataclasses import InitVar, dataclass, fields
-from importlib.resources.abc import Traversable
+from dataclasses import dataclass, fields
+from importlib.abc import Traversable
 from pathlib import Path
 from typing import Any, Callable, ClassVar
-import contextlib
 
 from linkml._version import __version__
 from linkml.utils.generator import Generator
 import tempfile
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
-from jinja2 import Environment, PackageLoader, Template, select_autoescape
-from jinja2.environment import get_spontaneous_environment
-from shutil import copytree, copy
+from jinja2 import Environment, select_autoescape
+from shutil import copytree
 from linkml_runtime import SchemaView
 from linkml_runtime.linkml_model import SchemaDefinition
+import os
 
 from proclaim.util import mandatory, description, domain, remove_newlines
 
@@ -106,8 +105,11 @@ class MkDocsGenerator(Generator, ABC):
             # Run the build
             (tmp / "mkdocs.yml").touch()
             self.make_markdown(tmp_markdown_dir, sv)
-            with contextlib.chdir(tmp):
-                build(load_config(**config, site_name=self.site_name, markdown_extensions=["tables"], site_dir=str(tmp_html_dir), docs_dir=str(tmp_markdown_dir)))
+            # This can use contextlib.chdir once 3.10 is dropped
+            wd = os.getcwd()
+            os.chdir(tmp)
+            build(load_config(**config, site_name=self.site_name, markdown_extensions=["tables"], site_dir=str(tmp_html_dir), docs_dir=str(tmp_markdown_dir)))
+            os.chdir(wd)
 
             # Setup result directory
             root = Path(directory)

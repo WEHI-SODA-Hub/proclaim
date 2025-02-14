@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from importlib.resources.abc import Traversable
+from importlib.abc import Traversable
 from pathlib import Path
 from importlib.resources import files
-from typing import Any, Callable
+from typing import Any
 from linkml_runtime import SchemaView
 
 from linkml._version import __version__
@@ -19,7 +19,7 @@ class ProfileHtmlGenerator(MkDocsGenerator):
     Converts LinkML schema into a single page HTML document that describes the profile
     """
     graph: Graph = Graph()
-    template_path: Traversable = files(__name__) / "profile.jinja2"
+    template_path: Traversable = files("proclaim.html") / "profile.jinja2"
 
     def get_globals(self) -> dict[str, Any]:
         return {
