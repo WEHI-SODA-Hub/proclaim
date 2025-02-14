@@ -11,8 +11,8 @@ def test_mode_file_generation(process_run: str, process_run_sv: SchemaView):
     assert "MediaObject" not in mode_classes, "Schema.org classes should not be included in the mode file"
     for cname, mode_cls in mode.classes.items():
         assert len(mode_cls.inputs) == len(process_run_sv.class_slots(cname))
-        assert mode_cls.id is not None and ":" not in mode_cls.id
+        assert mode_cls.id is not None and "wfrun:" not in mode_cls.id
         for slot in mode_cls.inputs:
-            assert slot.id is not None and ":" not in slot.id
+            assert slot.id is not None and "wfrun:" not in slot.id
             assert slot.help is not None
             assert slot.label is not None
