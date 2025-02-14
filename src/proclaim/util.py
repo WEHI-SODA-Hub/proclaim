@@ -1,5 +1,8 @@
+from pathlib import Path
 from typing import TypeVar
 from linkml_runtime.linkml_model import Element, SlotDefinition, SlotDefinitionName
+from rdflib import Graph, URIRef
+from rdfcrate import uris
 
 
 T = TypeVar("T")

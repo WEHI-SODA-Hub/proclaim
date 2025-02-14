@@ -13,6 +13,17 @@ def test_crate(process_run: str):
         assert (output_dir / "index.html").exists()
         assert (output_dir / "shapes.ttl").exists()
         assert (output_dir / "mode.json").exists()
+        assert not (output_dir / "site").exists()
+
+        linkml = output_dir / "linkml"
+        assert linkml.exists()
+        assert len(list(linkml.glob("*.yml"))) > 1
+
+        vocab = (output_dir / "vocabulary")
+        assert vocab.exists()
+        assert vocab.is_dir()
+        assert not (vocab / "site").exists()
+        assert (vocab / "html" / "index.html").exists()
 
         parsed_crate = json.loads((output_dir / "ro-crate-metadata.json").read_text())
 

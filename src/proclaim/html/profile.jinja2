@@ -1,0 +1,27 @@
+# {{ sv.schema.name }} Profile
+
+## Crate Contents
+
+File Name | Short Description | Long Description
+--- | --- | ---
+{% for file_of_interest in ["ro-crate-metadata.json", "shapes.ttl", "mode.json", "linkml/", "index.html", "vocabulary/", "vocabulary/markdown/", "vocabulary/html/"] %}
+[`{{ file_of_interest }}`]({{ file_of_interest }}) | {{ graph.value(subject=rdflib.URIRef(file_of_interest), predicate=uris.name) | default("", True) }} | {{ graph.value(subject=rdflib.URIRef(file_of_interest), predicate=uris.description) | default("", True) }}
+{% endfor %}
+
+## Profile Definition
+
+{{ sv.schema.description | mandatory("A LinkML schema must have a `description` field to be converted to an RO-Crate Profile") }}
+
+{% for cname, cls in sv.all_classes(imports=False).items() %}
+
+### {{ cname }}
+
+{{ cls | description }}
+
+Name | Description | Range
+--- | --- | ---
+{% for sname in sv.class_slots(cls.name, imports=True) %}
+{% set slot = sv.induced_slot(slot_name=sname, class_name=cname) %}
+`{{ sname }}` | {{ slot | description | remove_newlines }} | `{{ slot.range }}`
+{% endfor %}
+{% endfor %}
