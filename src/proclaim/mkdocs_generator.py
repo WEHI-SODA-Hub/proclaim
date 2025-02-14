@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
-from dataclasses import InitVar, dataclass, fields
-from importlib.resources.abc import Traversable
+from dataclasses import dataclass, fields
+from importlib.abc import Traversable
 from pathlib import Path
 from typing import Any, Callable, ClassVar
 import contextlib
@@ -10,9 +10,8 @@ from linkml.utils.generator import Generator
 import tempfile
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
-from jinja2 import Environment, PackageLoader, Template, select_autoescape
-from jinja2.environment import get_spontaneous_environment
-from shutil import copytree, copy
+from jinja2 import Environment, select_autoescape
+from shutil import copytree
 from linkml_runtime import SchemaView
 from linkml_runtime.linkml_model import SchemaDefinition
 
