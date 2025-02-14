@@ -105,6 +105,7 @@ class MkDocsGenerator(Generator, ABC):
             # Run the build
             (tmp / "mkdocs.yml").touch()
             self.make_markdown(tmp_markdown_dir, sv)
+            # This can use contextlib.chdir once 3.10 is dropped
             wd = os.getcwd()
             os.chdir(tmp)
             build(load_config(**config, site_name=self.site_name, markdown_extensions=["tables"], site_dir=str(tmp_html_dir), docs_dir=str(tmp_markdown_dir)))
