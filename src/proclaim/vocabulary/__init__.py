@@ -10,7 +10,7 @@ class VocabularyHtmlGenerator(MkDocsGenerator):
     The intention is that the IRIs of the classes and properties should resolve to these pages, which can be used in other RDF scenarios that don't even necessarily relate to RO-Crate.
     """
     def make_markdown(self, markdown_dir: Path, sv: SchemaView) -> None:
-        package_files = files(__name__)
+        package_files = files("proclaim.vocabulary")
         (markdown_dir / "index.md").touch()
 
         properties = markdown_dir / "properties"
