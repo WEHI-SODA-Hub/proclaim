@@ -2,10 +2,10 @@
 
 ## Crate Contents
 
-File Name | Description
---- | ---
-{% for file_of_interest in ["ro-crate-metadata.json", "shapes.ttl", "mode.json", "linkml.yml", "index.html", "vocabulary/"] %}
-[`{{ file_of_interest }}`](/{{ file_of_interest }}) | {{ graph | file_description(file_of_interest) }}
+File Name | Short Description | Long Description
+--- | --- | ---
+{% for file_of_interest in ["ro-crate-metadata.json", "shapes.ttl", "mode.json", "linkml/", "index.html", "vocabulary/", "vocabulary/markdown/", "vocabulary/html/"] %}
+[`{{ file_of_interest }}`]({{ file_of_interest }}) | {{ graph.value(subject=rdflib.URIRef(file_of_interest), predicate=uris.name) | default("", True) }} | {{ graph.value(subject=rdflib.URIRef(file_of_interest), predicate=uris.description) | default("", True) }}
 {% endfor %}
 
 ## Profile Definition
