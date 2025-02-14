@@ -7,6 +7,7 @@ license: Apache-2.0
 created_by: https://github.com/ResearchObject/workflow-run-crate/graphs/contributors
 prefixes:
   schema: http://schema.org/
+  wfrun: https://w3id.org/ro/terms/workflow-run#
 imports:
   - ./schemaorg_current
   - ./formal_parameter
