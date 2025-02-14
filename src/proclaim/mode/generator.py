@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, ClassVar, cast
+from typing import Any, ClassVar, cast, TypeVar
 from packaging.version import parse as parse_version
 from linkml_runtime.linkml_model.meta import ElementName
 
@@ -17,7 +17,8 @@ import json
 
 import proclaim.mode.schema as mode
 
-def fail_unless[T](x: T | None, msg: str) -> T:
+T = TypeVar("T")
+def fail_unless(x: T | None, msg: str) -> T:
     if x is None:
         raise ValueError(f"{msg} must be specified in the LinkML schema to be compatible with the mode file generator")
     return x
