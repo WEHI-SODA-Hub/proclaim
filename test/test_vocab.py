@@ -10,3 +10,4 @@ def test_html_generator(process_run: str):
         assert (tmp / "html" / "index.html").exists()
         assert (tmp / "html" / "classes" / "SIFImage" / "index.html").exists()
         assert (tmp / "html" / "properties" / "resourceUsage" / "index.html").exists()
+        assert not (tmp / "site").exists()

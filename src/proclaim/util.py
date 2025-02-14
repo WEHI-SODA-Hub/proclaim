@@ -42,9 +42,3 @@ def domain(slot: SlotDefinition) -> set[SlotDefinitionName]:
 
 def remove_newlines(s: str) -> str:
     return s.replace("\n", " ")
-
-def file_description(graph: Graph, file: Path) -> str:
-    """
-    Get the description of a file in the RO-Crate graph
-    """
-    return graph.value(subject=URIRef(file), predicate=uris.name)
