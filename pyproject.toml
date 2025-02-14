@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Create RO-Crate profiles from LinkML schemas"
 readme = "README.md"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 classifiers = [
     "Programming Language :: Python :: 3",
