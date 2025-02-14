@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Self, TypeAlias, Union, Annotated
+from typing import Any, Callable, Dict, List, Optional, TypeAlias, Union
+from typing_extensions import Self, Annotated
 
 from pydantic import BaseModel, Field, StringConstraints, model_serializer
 
